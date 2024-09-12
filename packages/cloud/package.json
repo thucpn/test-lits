@@ -1,0 +1,41 @@
+{
+  "name": "@llamaindex/cloud",
+  "version": "0.2.4",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "generate": "pnpx @hey-api/openapi-ts@0.53.0",
+    "build": "pnpm run generate && bunchee"
+  },
+  "files": [
+    "openapi.json",
+    "dist"
+  ],
+  "exports": {
+    "./openapi.json": "./openapi.json",
+    "./api": {
+      "require": {
+        "types": "./dist/api.d.cts",
+        "default": "./dist/api.cjs"
+      },
+      "import": {
+        "types": "./dist/api.d.ts",
+        "default": "./dist/api.js"
+      },
+      "default": {
+        "types": "./dist/api.d.ts",
+        "default": "./dist/api.js"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/himself65/LlamaIndexTS.git",
+    "directory": "packages/cloud"
+  },
+  "devDependencies": {
+    "@hey-api/client-fetch": "^0.2.4",
+    "@hey-api/openapi-ts": "^0.53.0",
+    "bunchee": "5.3.2"
+  }
+}

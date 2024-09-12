@@ -4,19 +4,19 @@ A transformation is something that takes a list of nodes as an input, and return
 
 Currently, the following components are Transformation objects:
 
-- [SimpleNodeParser](../api/classes/SimpleNodeParser.md)
+- [SentenceSplitter](../../api/classes/SentenceSplitter.md)
 - [MetadataExtractor](../documents_and_nodes/metadata_extraction.md)
-- Embeddings
+- [Embeddings](../embeddings/index.md)
 
 ## Usage Pattern
 
 While transformations are best used with with an IngestionPipeline, they can also be used directly.
 
 ```ts
-import { SimpleNodeParser, TitleExtractor, Document } from "llamaindex";
+import { SentenceSplitter, TitleExtractor, Document } from "llamaindex";
 
 async function main() {
-  let nodes = new SimpleNodeParser().getNodesFromDocuments([
+  let nodes = new SentenceSplitter().getNodesFromDocuments([
     new Document({ text: "I am 10 years old. John is 20 years old." }),
   ]);
 
@@ -34,15 +34,15 @@ main().catch(console.error);
 
 ## Custom Transformations
 
-You can implement any transformation yourself by implementing the `TransformerComponent`.
+You can implement any transformation yourself by implementing the `TransformComponent`.
 
-The following custom transformation will remove any special characters or punctutaion in text.
+The following custom transformation will remove any special characters or punctuation in text.
 
 ```ts
-import { TransformerComponent, Node } from "llamaindex";
+import { TransformComponent, TextNode } from "llamaindex";
 
-class RemoveSpecialCharacters extends TransformerComponent {
-  async transform(nodes: Node[]): Promise<Node[]> {
+export class RemoveSpecialCharacters extends TransformComponent {
+  async transform(nodes: TextNode[]): Promise<TextNode[]> {
     for (const node of nodes) {
       node.text = node.text.replace(/[^\w\s]/gi, "");
     }
@@ -75,3 +75,7 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+## API Reference
+
+- [TransformComponent](../../api/classes/TransformComponent.md)

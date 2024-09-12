@@ -1,6 +1,6 @@
 import jsonpath from "jsonpath";
 
-import { Response } from "llamaindex";
+import { EngineResponse } from "llamaindex";
 
 import { serviceContextFromDefaults, type ServiceContext } from "llamaindex";
 
@@ -147,11 +147,13 @@ export class JSONQueryEngine implements QueryEngine {
     return JSON.stringify(this.jsonSchema);
   }
 
-  query(params: QueryEngineParamsStreaming): Promise<AsyncIterable<Response>>;
-  query(params: QueryEngineParamsNonStreaming): Promise<Response>;
+  query(
+    params: QueryEngineParamsStreaming,
+  ): Promise<AsyncIterable<EngineResponse>>;
+  query(params: QueryEngineParamsNonStreaming): Promise<EngineResponse>;
   async query(
     params: QueryEngineParamsStreaming | QueryEngineParamsNonStreaming,
-  ): Promise<Response | AsyncIterable<Response>> {
+  ): Promise<EngineResponse | AsyncIterable<EngineResponse>> {
     const { query, stream } = params;
 
     if (stream) {
@@ -160,18 +162,18 @@ export class JSONQueryEngine implements QueryEngine {
 
     const schema = this.getSchemaContext();
 
-    const jsonPathResponseStr = await this.serviceContext.llm.complete({
+    const { text: jsonPathResponse } = await this.serviceContext.llm.complete({
       prompt: this.jsonPathPrompt({ query, schema }),
     });
 
     if (this.verbose) {
       console.log(
-        `> JSONPath Instructions:\n\`\`\`\n${jsonPathResponseStr}\n\`\`\`\n`,
+        `> JSONPath Instructions:\n\`\`\`\n${jsonPathResponse}\n\`\`\`\n`,
       );
     }
 
     const jsonPathOutput = await this.outputProcessor({
-      llmOutput: jsonPathResponseStr.text,
+      llmOutput: jsonPathResponse,
       jsonValue: this.jsonValue,
     });
 
@@ -186,7 +188,7 @@ export class JSONQueryEngine implements QueryEngine {
         prompt: this.responseSynthesisPrompt({
           query,
           jsonSchema: schema,
-          jsonPath: jsonPathResponseStr.text,
+          jsonPath: jsonPathResponse,
           jsonPathValue: JSON.stringify(jsonPathOutput),
         }),
       });
@@ -197,10 +199,10 @@ export class JSONQueryEngine implements QueryEngine {
     }
 
     const responseMetadata = {
-      jsonPathResponseStr,
+      jsonPathResponse,
     };
 
-    const response = new Response(responseStr, []);
+    const response = EngineResponse.fromResponse(responseStr, false);
 
     response.metadata = responseMetadata;
 

@@ -1,3 +1,5 @@
+const { join } = require("node:path");
+
 module.exports = {
   root: true,
   extends: [
@@ -6,7 +8,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended-type-checked-only",
   ],
   parserOptions: {
-    project: true,
+    project: join(__dirname, "tsconfig.eslint.json"),
     __tsconfigRootDir: __dirname,
   },
   settings: {
@@ -23,12 +25,18 @@ module.exports = {
         ignoreIIFE: true,
       },
     ],
+    "no-debugger": "error",
     "@typescript-eslint/await-thenable": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-types": "off",
     "no-array-constructor": "off",
     "@typescript-eslint/no-array-constructor": "off",
-    "@typescript-eslint/no-base-to-string": "off",
+    "@typescript-eslint/no-base-to-string": [
+      "error",
+      {
+        ignoredTypeNames: ["Error", "RegExp", "URL", "URLSearchParams"],
+      },
+    ],
     "@typescript-eslint/no-duplicate-enum-values": "off",
     "@typescript-eslint/no-duplicate-type-constituents": "off",
     "@typescript-eslint/no-explicit-any": "off",

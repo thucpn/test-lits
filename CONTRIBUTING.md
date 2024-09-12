@@ -4,11 +4,11 @@
 
 This is a monorepo built with Turborepo
 
-Right now there are two packages of importance:
+Right now, for first-time contributors, these three packages are of the highest importance:
 
-packages/core which is the main NPM library llamaindex
-
-examples is where the demo code lives
+- `packages/llamaindex` which is the main NPM library `llamaindex`
+- `examples` is where the demo code lives
+- `apps/docs` is where the code for the documentation of https://ts.llamaindex.ai/ is located
 
 ### Turborepo docs
 
@@ -41,13 +41,13 @@ To run them, run
 pnpm run test
 ```
 
-To write new test cases write them in [packages/core/src/tests](/packages/core/src/tests)
+To write new test cases write them in [packages/llamaindex/tests](/packages/llamaindex/tests)
 
-We use Jest https://jestjs.io/ to write our test cases. Jest comes with a bunch of built in assertions using the expect function: https://jestjs.io/docs/expect
+We use Vitest https://vitest.dev to write our test cases. Vitest comes with a bunch of built-in assertions using the expect function: https://vitest.dev/api/expect.html#expect
 
 ### Demo applications
 
-There is an existing ["example"](/examples/README.md) demos folder with mainly NodeJS scripts. Feel free to add additional demos to that folder. If you would like to try out your changes in the core package with a new demo, you need to run the build command in the README.
+There is an existing ["example"](/examples/README.md) demos folder with mainly NodeJS scripts. Feel free to add additional demos to that folder. If you would like to try out your changes in the `llamaindex` package with a new demo, you need to run the build command in the README.
 
 You can create new demo applications in the apps folder. Just run pnpm init in the folder after you create it to create its own package.json
 
@@ -56,7 +56,7 @@ You can create new demo applications in the apps folder. Just run pnpm init in t
 To install packages for a specific package or demo application, run
 
 ```
-pnpm add [NPM Package] --filter [package or application i.e. core or docs]
+pnpm add [NPM Package] --filter [package or application i.e. llamaindex or docs]
 ```
 
 To install packages for every package or application run
@@ -81,7 +81,7 @@ Any changes you make should be reflected in the browser. If you need to regenera
 
 ## Changeset
 
-We use [changesets](https://github.com/changesets/changesets) for managing versions and changelogs. To create a new changeset, run:
+We use [changesets](https://github.com/changesets/changesets) for managing versions and changelogs. To create a new changeset, run in the root folder:
 
 ```
 pnpm changeset
